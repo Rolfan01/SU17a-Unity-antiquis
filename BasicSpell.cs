@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -31,7 +31,9 @@ public class BasicSpell : MonoBehaviour
             Rigidbody2D tempRigidbody;
             tempRigidbody = tempSpell.GetComponent<Rigidbody2D>();
 
-            tempRigidbody.AddForce(this.transform.position * spellForce, ForceMode2D.Impulse);      // This means that it gets diffrent force depending on where on the screen you click which is a bit trubbeling but fine for now
+            Vector2 direction = (transform.position - spellCaster.transform.position).normalized;
+
+            tempRigidbody.AddForce(direction * spellForce, ForceMode2D.);      // This means that it gets diffrent force depending on where on the screen you click which is a bit trubbeling but fine for now
                                                                                                     // Wanted to test ForceMode2D and it worked fine 
 
             timestamp = Time.time + timeBetweenSpells;
