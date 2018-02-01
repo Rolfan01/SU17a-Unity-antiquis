@@ -16,9 +16,6 @@ public class BasicSpell : MonoBehaviour
     void Update()
     {
         Cast();
-
-        Vector3 crossair = Input.mousePosition;
-        this.transform.position = Camera.main.ScreenToWorldPoint(crossair);
     }
 
     void Cast()
@@ -26,14 +23,15 @@ public class BasicSpell : MonoBehaviour
         if  (Time.time >= timestamp && (Input.GetMouseButtonDown(0)))
         {
             GameObject tempSpell;
-            tempSpell = Instantiate(spell, spellCaster.transform.position, spellCaster.transform.rotation) as GameObject;
+            Vector2 direction = Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position;
+            float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+            Quaternion rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+            tempSpell = Instantiate(spell, spellCaster.transform.position, rotation) as GameObject;
 
             Rigidbody2D tempRigidbody;
             tempRigidbody = tempSpell.GetComponent<Rigidbody2D>();
-
-            Vector2 direction = (transform.position - spellCaster.transform.position).normalized;
-
-            tempRigidbody.AddForce(direction * spellForce, ForceMode2D.);      // This means that it gets diffrent force depending on where on the screen you click which is a bit trubbeling but fine for now
+            
+            tempRigidbody.AddForce(tempSpell.transform.right * spellForce, ForceMode2D.Impulse);      // This means that it gets diffrent force depending on where on the screen you click which is a bit trubbeling but fine for now
                                                                                                     // Wanted to test ForceMode2D and it worked fine 
 
             timestamp = Time.time + timeBetweenSpells;
